@@ -1,0 +1,58 @@
+<div class="w3-light-grey" style="padding:15px">
+  <div class="container">
+    <form id="contact" (ngSubmit)="onSubmit(); usForm.reset()" #usForm="ngForm">
+
+      <table style="width: 100%">
+        <tr>
+          <td style="width:80%">
+            <h3>{{cardTitle}}</h3>
+          </td>
+          <td>
+            <h4 style="float:right; color:grey">ID : {{TheUserStory.id}}</h4>
+          </td>
+        </tr>
+      </table>
+      <br>
+
+      <h4>As a</h4>
+      <fieldset>
+        <input name="userTypeInput" placeholder="User Type" type="text" tabindex="1" required autofocus [(ngModel)]="TheUserStory.userType">
+      </fieldset>
+      <h4>I can</h4>
+      <fieldset>
+        <input name="activityInput" placeholder="Acitivity" type="text" tabindex="2" required [(ngModel)]="TheUserStory.activity">
+      </fieldset>
+      <h4>so that</h4>
+      <fieldset>
+        <input name="businessValueInput" placeholder="Business Value" type="text" tabindex="3" required [(ngModel)]="TheUserStory.businessValue">
+      </fieldset>
+
+      <br>
+      <hr>
+      <br>
+
+      <h4>Acceptance criteria : </h4>
+      <fieldset>
+        <textarea name="acceptanceCriteriaInput" cols="40" rows="5" [(ngModel)]="TheUserStory.acceptanceCriteria"></textarea>
+      </fieldset>
+      <fieldset>
+        <select name="projectInput" required [(ngModel)]="TheUserStory.project">
+          <option *ngFor="let project of projects" [value]="project">{{project}}</option>
+        </select>
+      </fieldset>
+
+      <br>
+
+      <fieldset>
+        <button name="Cancel" type="button" id="contact-cancel" (click)="onCancel();">Cancel</button>
+        <button name="submit" type="submit" id="contact-submit" [disabled]="!usForm.form.valid">Create</button>
+      </fieldset>
+    </form>
+  </div>
+  <div>
+    <ul>
+      <li *ngFor="let us of userStories">As a {{us.userType}} I can {{us.activity}} p: {{us.project}}</li>
+    </ul>
+    {{baliyak.body}}
+  </div>
+</div>

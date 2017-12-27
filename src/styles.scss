@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+html,body,h1,h2,h3,h4,h5 
+{
+    font-family: "Raleway", sans-serif
+}
+
+/*
+body{
+    background: skyblue;
+    padding: 3em;
+    font-family: 'Raleway';
+    color:black;
+}
+*/
