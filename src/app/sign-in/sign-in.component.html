@@ -1,0 +1,12 @@
+<div class="w3-light-grey">
+  <div class="login-page">
+    <div class="form">
+      <h3>Sign in as a different user</h3>
+      <form class="login-form">
+        <input name="userNameInput" type="text" placeholder="username" [(ngModel)]="userName"/>
+        <input name="passwordInput" type="password" placeholder="password" [(ngModel)]="password"/>
+        <button (click)="onSubmit()">login</button>
+      </form>
+    </div>
+  </div>
+</div>

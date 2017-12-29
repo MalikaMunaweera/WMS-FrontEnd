@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="buttonHolder">
+    <a routerLink="CreateWorkflow" class="w3-bar-item w3-button w3-padding createNew">
+      <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i> Create New Workflow</a>
+  </div>
+  <div *ngIf="allWorkflows != undefined && allWorkflows.length != 0">
+    <!--Active workflows -->
+    <div class="w3-panel">
+      <div class="w3-row-padding" style="margin:0 -16px">
+        <div>
+          <h5>Active Workflows</h5>
+          <div>
+            <table class="w3-table w3-striped w3-white">
+
+              <tr>
+                <th>Name</th>
+                <th>Version</th>
+                <th>Created By</th>
+                <th>Created On</th>
+                <th></th>
+              </tr>
+
+              <tr *ngFor="let workflow of allWorkflows | filterBy: activeFilter | orderBy: createdDate : true">
+                <td>{{workflow.name}}</td>
+                <td>{{workflow.version}}</td>
+                <td>{{workflow.createdBy.firstName}}</td>
+                <td>
+                  <i>{{workflow.createdDate | date : 'dd-MM-yyyy'}}</i>
+                </td>
+                <td>
+                  <i class="fa fa-pencil-square fa-2x editButton" aria-hidden="true" (click)="edit(workflow)"></i>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--End of Active workflows-->
+    <hr>
+    <!--inactive workflows -->
+    <div class="w3-panel">
+      <div class="w3-row-padding" style="margin:0 -16px">
+        <div>
+          <h5>Inactive Workflows</h5>
+          <div>
+            <table class="w3-table w3-striped w3-white" *ngIf="allWorkflows != undefined">
+
+              <tr>
+                <th>Name</th>
+                <th>Version</th>
+                <th>Created By</th>
+                <th>Created On</th>
+                <th></th>
+              </tr>
+
+              <tr *ngFor="let workflow of allWorkflows | filterBy: !activeFilter | orderBy: createdDate : true">
+                <td>{{workflow.name}}</td>
+                <td>{{workflow.version}}</td>
+                <td>{{workflow.createdBy.firstName}}</td>
+                <td>
+                  <i>{{workflow.createdDate | date : 'dd-MM-yyyy'}}</i>
+                </td>
+                <td>
+                  <i class="fa fa-pencil-square fa-2x editButton" aria-hidden="true" (click)="edit(workflow)"></i>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--End of inactive workflows-->
+  </div>
+</div>

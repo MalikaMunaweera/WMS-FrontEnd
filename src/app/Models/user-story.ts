@@ -13,8 +13,9 @@ export class UserStory {
     public acceptanceCriteria: string;
     public approvalStatus: string;
     public project: Project;
-    public createdOn: Date;
+    public createdDate: Date;
     public createdBy: User;
     public lastModified: Date;
-    public lastModifiedBy: User;
+    public modifiedBy: User;
+
 }

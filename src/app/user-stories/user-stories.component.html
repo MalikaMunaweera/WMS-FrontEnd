@@ -1,3 +1,56 @@
-<p>
-  user-stories works!
-</p>
+<div class="buttonHolder">
+  <a routerLink="CreateUserStory" class="w3-bar-item w3-button w3-padding createNew">
+    <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i> Add New User Stroy</a>
+</div>
+<!--New -->
+<div class="w3-panel">
+  <div class="w3-row-padding" style="margin:0 -16px">
+    <div>
+      <h5>New User Stories</h5>
+      <div>
+        <table class="w3-table w3-striped w3-white" *ngIf="allUserStories != undefined">
+
+          <tr>
+            <th>Name</th>
+            <th>Created By</th>
+            <th>Created On</th>
+            <th></th>
+          </tr>
+
+          <tr *ngFor="let userStory of allUserStories | filterBy: newFilter | orderBy: createdDate : true">
+            <!-- <td><i [class]="exec.icon"></i></td> -->
+            <td>{{userStory.name}}</td>
+            <td>{{userStory.createdBy.firstName}}</td>
+            <td>
+              <i>{{userStory.createdDate | date : 'dd-MM-yyyy'}}</i>
+            </td>
+            <td><i class="fa fa-pencil-square fa-2x editButton" aria-hidden="true" (click)="edit(userStory)"></i></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End of New-->
+
+<!--Pending -->
+<div class="w3-panel">
+  <div class="w3-row-padding" style="margin:0 -16px">
+    <div>
+      <h5>Pending Approval</h5>
+      <div>
+        <table class="w3-table w3-striped w3-white" *ngIf="allUserStories != undefined">
+          <tr *ngFor="let userStory of allUserStories | filterBy: processingFilter | orderBy: createdDate : true">
+            <!-- <td><i [class]="exec.icon"></i></td> -->
+            <td>{{userStory.name}}</td>
+            <td>{{userStory.createdBy.firstName}}</td>
+            <td>
+              <i>{{userStory.createdDate | date : 'dd-MM-yyyy'}}</i>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End of New-->

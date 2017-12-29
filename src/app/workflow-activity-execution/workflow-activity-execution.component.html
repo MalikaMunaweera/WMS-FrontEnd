@@ -1,0 +1,16 @@
+<div class="rectangle center">
+    <input name="activityName" class="nameBox activityName" placeholder="Name this activity..." type="text" tabindex="1" required
+      [(ngModel)]="activity.name">
+    <i class="fa fa-times-circle cancelButton" aria-hidden="true" (click)="removeActivity(i)"></i>
+    <div class="content">
+      <div *ngFor="let field of activity.fields">
+        <div *ngIf="field.type.id==1 || field.type.id==3">
+          <h6>
+            <b>{{field.type.name}} :</b>
+          </h6>
+          <input [name]="'input' + field.type.id" placeholder="Approver's email address" [type]="field.type.dataType" tabindex="1"
+            required [(ngModel)]="field.value">
+        </div>
+      </div>
+    </div>
+  </div>

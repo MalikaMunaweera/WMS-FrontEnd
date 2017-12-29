@@ -13,7 +13,7 @@ export class WorkflowActivity {
     constructor(activityType: WorkflowActivityType) {
         this.type = activityType;
         this.fields = [];
-
+        
         activityType.fieldTypes.forEach(fieldType => {
             var activityField = new WorkflowActivityField(fieldType);
             this.fields.push(activityField);

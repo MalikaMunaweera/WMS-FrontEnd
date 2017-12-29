@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { UserStory } from '../Models/user-story';
-import { UserStoryService } from '../user-story.service';
-import { Project } from '../Models/project';
-import { ProjectService } from '../project.service';
 import { User } from '../Models/user';
+import { Project } from '../Models/project';
+import { UserStoryService } from '../user-story.service';
+import { ProjectService } from '../project.service';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-create-user-story',
-  templateUrl: './create-user-story.component.html',
-  styleUrls: ['./create-user-story.component.scss']
+  selector: 'app-edit-user-story',
+  templateUrl: '../create-user-story/create-user-story.component.html',
+  styleUrls: ['../create-user-story/create-user-story.component.scss']
 })
-export class CreateUserStoryComponent implements OnInit {
+export class EditUserStoryComponent implements OnInit {
 
-  cardTitle: string = 'Create a New User Story';
-  btnText: string = 'Create';
-  userStory: UserStory = new UserStory();
+  cardTitle: string = 'Edit User Story';
+  btnText: string = 'Save';
+  userStory: UserStory;
   loggedInUser: User;
-  selectedProject : Project;
   projects: Project[];
+  selectedProject : Project;
 
   constructor(private userStoryService: UserStoryService, private projectService: ProjectService, private userService: UserService, private router: Router) {
   }
@@ -28,26 +28,26 @@ export class CreateUserStoryComponent implements OnInit {
 
     this.projectService.geAllProjects().subscribe(data => {
       this.projects = data;
+
+      this.userStory = this.userStoryService.getEditModerUserStory();
+      console.log('US: ', this.userStory);
+
+      this.selectedProject = this.projects.find(x => x.id == this.userStory.project.id);
+      console.log('US: ', this.userStory);
+
     });
 
     this.userService.getLoggedInUser().subscribe(data => {
       this.loggedInUser = data;
-    })
-
-    this.userStory = new UserStory();
+    });
 
   }
 
   onSubmit() {
 
-    this.userStory.id = 0;
-    this.userStory.approvalStatus = 'New';
-    this.userStory.createdBy = this.loggedInUser;
     this.userStory.modifiedBy = this.loggedInUser;
-    this.userStory.project = this.selectedProject;
 
-    console.log('project', this.userStory.project);
-    this.userStoryService.addUserStory(this.userStory).subscribe(data => {
+    this.userStoryService.updateUserStory(this.userStory).subscribe(data => {
       if (data) {
         this.router.navigateByUrl('UserStories');
       }
@@ -56,6 +56,10 @@ export class CreateUserStoryComponent implements OnInit {
   }
 
   onCancel() {
+
     this.router.navigateByUrl('UserStories');
+
   }
+
+
 }

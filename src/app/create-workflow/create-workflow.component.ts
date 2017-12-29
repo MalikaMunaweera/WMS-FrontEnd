@@ -3,6 +3,9 @@ import { Workflow } from '../Models/workflow';
 import { WorkflowActivity } from '../Models/workflow-activity';
 import { WorkflowActivityType } from '../Models/workflow-activity-type';
 import { WorkflowService } from '../workflow.service';
+import { Router } from '@angular/router';
+import { User } from '../Models/user';
+import { UserService } from '../user.service';
 
 
 @Component({
@@ -14,38 +17,55 @@ export class CreateWorkflowComponent implements OnInit {
 
   buttonText = 'Create';
   workflow = new Workflow([]);
+  loggedInUser: User;
 
-
-  constructor(private workflowService: WorkflowService) { }
+  constructor(private workflowService: WorkflowService, private router: Router, private userService: UserService) { }
 
   ngOnInit() {
+
+    this.userService.getLoggedInUser().subscribe(data => {
+      this.loggedInUser = data;
+    })
+
   }
 
   addActivity(activtyType: number) {
 
     this.workflow.activities.push(this.workflowService.getNewWorkflowActivity(activtyType));
-    // console.log('The index is : ' + this.workflow.activities[0].type.fields);
 
   }
 
   removeActivity(index: number) {
 
-    // console.log('The index is : ' + index);
     this.workflow.activities.splice(index, 1);
 
   }
 
   onSubmit() {
-    this.workflowService.createNewWorkflow(this.workflow);
-    this.workflow = new Workflow([]);
+
+    this.workflow.id = 0;
+    this.workflow.version = 1.0;
+    this.workflow.createdBy = this.loggedInUser;
+    this.workflow.isActive = true;
+
+    for (let i = 0; i > this.workflow.activities.length; i++) {
+      this.workflow.activities[i].activityOrderNumber = i + 1;
+    }
+
+    this.workflowService.createNewWorkflow(this.workflow).subscribe(data => {
+      if (data) {
+        this.router.navigateByUrl('Workflows');
+      }
+    });
+
   }
 
   editVersion() {
-    this.workflow = this.workflowService.getWorkflow();
+    this.workflow = this.workflowService.getEditModeWorkflow();
   }
 
   onCancel() {
-    this.workflow = new Workflow([]);
+    this.router.navigateByUrl('Workflows');
   }
 
 }

@@ -21,16 +21,16 @@
         <div class="line"></div>
 
         <div class="rectangle center">
-          <input name="activityName" class="nameBox activityName" placeholder="Name this activity..." type="text" tabindex="1" required
+          <input [name]="'activityName'+i" class="nameBox activityName" placeholder="Name this activity..." type="text" tabindex="1" required
             [(ngModel)]="activity.name">
           <i class="fa fa-times-circle cancelButton" aria-hidden="true" (click)="removeActivity(i)"></i>
           <div class="content">
             <div *ngFor="let field of activity.fields">
-              <div *ngIf="field.type.id==1 || field.type.id==3">
+              <div *ngIf="field.type.id==1">
                 <h6>
                   <b>{{field.type.name}} :</b>
                 </h6>
-                <input [name]="'input' + field.type.id" placeholder="Approver's email address" [type]="field.type.dataType" tabindex="1"
+                <input [name]="'input1' + i" placeholder="Approver's email address" [type]="field.type.dataType" tabindex="1"
                   required [(ngModel)]="field.value">
               </div>
             </div>
@@ -51,11 +51,9 @@
         <label>End</label>
       </div>
       <div class="buttonHolder">
-        <button name="cancelBtn" type="button" class="button cancel" (click)="onCancel()">Cancel</button>
         <button name="submitBtn" type="submit" class="button submit" [disabled]="!wForm.form.valid">{{buttonText}}</button>
+        <button name="cancelBtn" type="button" class="button cancel" (click)="onCancel()">Cancel</button>
       </div>
     </form>
-    <button name="editBtn" type="button" class="" (click)="editVersion()">Edit version</button>
-    {{workflow | json}}
   </div>
 </div>

@@ -3,52 +3,74 @@ import { WorkflowActivity } from './Models/workflow-activity';
 import { WorkflowActivityType } from './Models/workflow-activity-type';
 import { WorkflowActivityFieldType } from './Models/workflow-activity-field-type';
 import { Workflow } from './Models/workflow';
+import { Observable } from 'rxjs/Observable';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../environments/environment';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class WorkflowService {
 
-  holdingTo: Workflow;
+  editModeWorkflow: Workflow;
+  allActivityTypes: WorkflowActivityType[];
 
-  fieldType_approver: WorkflowActivityFieldType = {
-    id: 1,
-    name: 'Approver',
-    dataType: 'email'
+  private httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  fieldType_approval: WorkflowActivityFieldType = {
-    id: 2,
-    name: 'Approval',
-    dataType: 'boolean'
-  };
+  constructor(private http: HttpClient) {
 
-  fieldType_due: WorkflowActivityFieldType = {
-    id: 3,
-    name: 'Due date',
-    dataType: 'Date'
-  };
+    if (this.allActivityTypes == undefined) {
+      this.http.get<WorkflowActivityType[]>(environment.apiRoot + 'WorkFlows/GetActivityTypes').subscribe(data => {
+        this.allActivityTypes = data;
+      });
+    }
 
-  activityType_approval = new WorkflowActivityType(1, 'Approval', [this.fieldType_approver, this.fieldType_approval, this.fieldType_due]);
-
-  constructor() { }
+  }
 
   getNewWorkflowActivity(activityTypeId: number): WorkflowActivity {
 
-    switch (activityTypeId) {
-      case 1:
-        return new WorkflowActivity(this.activityType_approval);
-    }
+    let activityType = this.allActivityTypes.find(x => x.id == activityTypeId);
+    let wfa = new WorkflowActivity(activityType);
+
+    wfa.id = 0;
+    wfa.fields.forEach(field => {
+      field.id = 0;
+    });
+
+    return wfa;
+
   }
 
-  createNewWorkflow(workflow: Workflow) {
+  createNewWorkflow(newWorkflow: Workflow): Observable<any> {
 
-    this.holdingTo = workflow;
+    console.log('The w : ', newWorkflow);
+    return this.http.post(environment.apiRoot + 'Workflows/AddWorkflow', newWorkflow, this.httpOptions).map(response => response);
 
   }
 
-  getWorkflow(): Workflow {
+  getAllWorkflows(): Observable<any> {
 
-    return this.holdingTo;
-    
+    return this.http.get<Workflow[]>(environment.apiRoot + 'workflows/GetWorkflows').map(response => response);
+
+  }
+
+  getEditModeWorkflow(): Workflow {
+
+    return this.editModeWorkflow;
+
+  }
+
+  setEditModeWorkflow(workflow: Workflow) {
+
+    this.editModeWorkflow = workflow;
+
+  }
+
+  getWorkflowsByActive(isActive: boolean): Observable<any> {
+
+    return this.http.get<Workflow[]>(environment.apiRoot + 'WorkFlows/GetWorkFlowsByStatus?isActive=' + isActive).map(response => response);
+
   }
 
 }

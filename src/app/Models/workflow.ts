@@ -8,8 +8,8 @@ export class Workflow {
     public name: string;
     public isActive: boolean;
     public activities: WorkflowActivity[];
-    public createdOn: Date;
-    public createdBy: User;
+    public createdDate: Date;
+    public createdBy: User; 
 
     constructor(activities: WorkflowActivity[]) {
         this.activities = activities;
